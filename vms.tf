@@ -64,10 +64,10 @@ resource "azurerm_linux_virtual_machine" "example" {
   network_interface_ids = [azurerm_network_interface.linux.id]
 
   # Update Manager scheduled patching settings.
-  patch_mode                                     = "AutomaticByPlatform"
-  patch_assessment_mode                          = "AutomaticByPlatform"
-  bypass_platform_safety_checks_on_user_schedule = true
-  provision_vm_agent                             = true
+  patch_mode                                             = "AutomaticByPlatform"
+  patch_assessment_mode                                  = "AutomaticByPlatform"
+  bypass_platform_safety_checks_on_user_schedule_enabled = true
+  provision_vm_agent                                     = true
 
   admin_ssh_key {
     username   = "azureuser"
@@ -104,11 +104,11 @@ resource "azurerm_windows_virtual_machine" "example" {
   network_interface_ids = [azurerm_network_interface.windows.id]
 
   # Update Manager scheduled patching settings.
-  patch_mode                                     = "AutomaticByPlatform"
-  patch_assessment_mode                          = "AutomaticByPlatform"
-  bypass_platform_safety_checks_on_user_schedule = true
-  provision_vm_agent                             = true
-  hotpatching_enabled                            = false
+  patch_mode                                             = "AutomaticByPlatform"
+  patch_assessment_mode                                  = "AutomaticByPlatform"
+  bypass_platform_safety_checks_on_user_schedule_enabled = true
+  provision_vm_agent                                     = true
+  hotpatching_enabled                                    = false
 
   os_disk {
     caching              = "ReadWrite"
