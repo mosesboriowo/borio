@@ -54,10 +54,10 @@ resource "azurerm_maintenance_assignment_dynamic_scope" "by_tag" {
   maintenance_configuration_id = azurerm_maintenance_configuration.patching.id
 
   filter {
-    locations       = [var.location]
-    resource_types  = ["Microsoft.Compute/virtualMachines"]
-    os_types        = ["Linux", "Windows"]
-    tag_filter      = "Any"
+    locations      = [var.location]
+    resource_types = ["Microsoft.Compute/virtualMachines"]
+    os_types       = ["Linux", "Windows"]
+    tag_filter     = "Any"
 
     dynamic "tags" {
       for_each = var.dynamic_scope_tags
