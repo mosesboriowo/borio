@@ -1,0 +1,28 @@
+# Copy to terraform.tfvars and edit. Do NOT commit real secrets.
+
+subscription_id     = "00000000-0000-0000-0000-000000000000"
+location            = "eastus"
+resource_group_name = "rg-update-manager"
+
+# ---- Patching calendar ----
+maintenance_config_name     = "mc-monthly-patching"
+window_start_date_time      = "2026-10-15 02:00"   # first occurrence (window_time_zone)
+window_expiration_date_time = null                  # or "2027-10-15 02:00"
+window_duration             = "03:00"               # HH:MM, 01:30 - 03:55
+window_time_zone            = "UTC"
+window_recur_every          = "1Month Second Tuesday"
+reboot_setting              = "IfRequired"
+
+# ---- Classifications ----
+linux_classifications   = ["Critical", "Security"]
+windows_classifications = ["Critical", "Security", "UpdateRollup", "Updates"]
+linux_package_excludes  = []
+windows_kb_excludes     = []
+
+# ---- Targeting ----
+dynamic_scope_tags = {
+  patch_group = ["monthly"]
+}
+
+# Set via `export TF_VAR_windows_admin_password=...` instead of here when possible.
+# windows_admin_password = "ChangeMe-UseKeyVault!"
