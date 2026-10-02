@@ -131,15 +131,34 @@ resource "azurerm_windows_virtual_machine" "example" {
 # Use this when you want to pin specific machines to the schedule regardless of
 # tags. It is complementary to the dynamic scope in main.tf; you can use either
 # or both. These examples pin the two VMs above directly.
+#
+# NOTE: After a VM is created with AutomaticByPlatform patch settings, the
+# Maintenance resource provider needs a moment to "see" those settings across
+# resource providers. Creating the assignment too soon fails with
+# "UnsupportedResourceOperation / prerequisites to patch ... were not met".
+# The time_sleep below gives that propagation time so the first apply succeeds.
 # -----------------------------------------------------------------------------
+resource "time_sleep" "wait_for_patch_settings" {
+  depends_on = [
+    azurerm_linux_virtual_machine.example,
+    azurerm_windows_virtual_machine.example,
+  ]
+
+  create_duration = var.patch_settings_propagation_delay
+}
+
 resource "azurerm_maintenance_assignment_virtual_machine" "linux" {
   location                     = azurerm_resource_group.this.location
   maintenance_configuration_id = azurerm_maintenance_configuration.patching.id
   virtual_machine_id           = azurerm_linux_virtual_machine.example.id
+
+  depends_on = [time_sleep.wait_for_patch_settings]
 }
 
 resource "azurerm_maintenance_assignment_virtual_machine" "windows" {
   location                     = azurerm_resource_group.this.location
   maintenance_configuration_id = azurerm_maintenance_configuration.patching.id
   virtual_machine_id           = azurerm_windows_virtual_machine.example.id
+
+  depends_on = [time_sleep.wait_for_patch_settings]
 }

@@ -15,6 +15,17 @@ variable "resource_group_name" {
   default     = "rg-update-manager"
 }
 
+variable "patch_settings_propagation_delay" {
+  description = <<-EOT
+    How long to wait after creating a VM before assigning it to the maintenance
+    configuration, so the AutomaticByPlatform patch settings propagate across
+    Azure resource providers. Raise it if you still hit "prerequisites to patch
+    ... were not met" on the maintenance assignment.
+  EOT
+  type        = string
+  default     = "120s"
+}
+
 variable "windows_admin_password" {
   description = "Admin password for the example Windows VM. Prefer a Key Vault reference or TF_VAR env var over a committed value."
   type        = string
